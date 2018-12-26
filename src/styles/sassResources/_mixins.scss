@@ -1,0 +1,8 @@
+@mixin title {
+    text-transform: uppercase;
+}
+
+@mixin font($ff, $fw) {
+	font-family: $ff;
+	font-weight: $fw;
+}

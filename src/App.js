@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import classes from './App.scss';
-// import Header from './components/Header';
+import Header from './components/Header';
 
 class App extends Component {
   // componentDidMount() {
@@ -13,10 +13,9 @@ class App extends Component {
   // }
   render() {
     return (
-      <div className={`App ` + classes.AppContainer }>
-        <div className="testclass">
-          hello world
-        </div>
+      <div>
+        <Header />
+        
       </div>
     );
   }

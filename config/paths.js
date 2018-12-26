@@ -82,7 +82,7 @@ module.exports = {
   appNodeModules: resolveApp('node_modules'),
   publicUrl: getPublicUrl(resolveApp('package.json')),
   servedPath: getServedPath(resolveApp('package.json')),
-  sassResources: resolveApp('src/sassResources'),
+  sassResources: resolveApp('src/styles/sassResources'),
 };
 
 

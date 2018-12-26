@@ -34,47 +34,6 @@ const env = getClientEnvironment(publicUrl);
 // Check if TypeScript is setup
 const useTypeScript = fs.existsSync(paths.appTsConfig);
 
-// style files regexes
-const cssRegex = /\.css$/;
-const cssModuleRegex = /\.module\.css$/;
-const sassRegex = /\.(scss|sass)$/;
-const sassModuleRegex = /\.module\.(scss|sass)$/;
-
-// common function to get style loaders
-const getStyleLoaders = (cssOptions, preProcessor) => {
-  const loaders = [
-    require.resolve('style-loader'),
-    {
-      loader: require.resolve('css-loader'),
-      options: cssOptions,
-    },
-    {
-      // Options for PostCSS as we reference these options twice
-      // Adds vendor prefixing based on your specified browser support in
-      // package.json
-      loader: require.resolve('postcss-loader'),
-      options: {
-        // Necessary for external CSS imports to work
-        // https://github.com/facebook/create-react-app/issues/2677
-        ident: 'postcss',
-        plugins: () => [
-          require('postcss-flexbugs-fixes'),
-          require('postcss-preset-env')({
-            autoprefixer: {
-              flexbox: 'no-2009',
-            },
-            stage: 3,
-          }),
-        ],
-      },
-    },
-  ];
-  if (preProcessor) {
-    loaders.push(require.resolve(preProcessor));
-  }
-  return loaders;
-};
-
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
 // The production configuration is different and lives in a separate file.
@@ -269,49 +228,13 @@ module.exports = {
               sourceMaps: false,
             },
           },
-          // "postcss" loader applies autoprefixer to our CSS.
-          // "css" loader resolves paths in CSS and adds assets as dependencies.
-          // "style" loader turns CSS into JS modules that inject <style> tags.
-          // In production, we use a plugin to extract that CSS to a file, but
-          // in development "style" loader enables hot editing of CSS.
-          // By default we support CSS Modules with the extension .module.css
           {
-            test: /\.css$/,
+            test: /\.s?css$/,
             exclude: /node_modules/,
             use: [
-              { loader: MiniCssExtractPlugin.loader },
               {
-                loader: 'css-loader',
-                options: {
-                  modules: true,
-                  camelCase: 'dashes',
-                  localIdentName: '[name]__[local]',
-                  sourceMap: true
-                }
+                loader: 'css-hot-loader'
               },
-              {
-                loader: 'postcss-loader',
-                options: {
-                  // Necessary for external CSS imports to work
-                  // https://github.com/facebook/create-react-app/issues/2677
-                  ident: 'postcss',
-                  plugins: () => [
-                    require('postcss-flexbugs-fixes'),
-                    require('postcss-preset-env')({
-                      autoprefixer: {
-                        flexbox: 'no-2009',
-                      },
-                      stage: 3,
-                    }),
-                  ],
-                },
-              }
-            ]
-          },
-          {
-            test: /\.scss$/,
-            exclude: /node_modules/,
-            use: [
               { loader: MiniCssExtractPlugin.loader },
               {
                 loader: 'css-loader',
@@ -322,16 +245,16 @@ module.exports = {
                   localIdentName: '[name]__[local]',
                   sourceMap: true
                 }
-              },
-              {
-                loader: 'sass-loader'
-              },
+              },  
+              { loader: 'postcss-loader' },
+              { loader: 'sass-loader' },
               {
                 loader: 'sass-resources-loader',
                 options: {
                   resources: [
-                    paths.sassResources + '/_main.scss',
-                    // paths.appNodeModules + '/bootstrap/scss/bootstrap_grid.scss'
+                    paths.sassResources + '/_variables.scss',
+                    paths.sassResources + '/_mixins.scss',
+                    paths.sassResources + '/_typography.scss',
                   ]
                 }
               }
